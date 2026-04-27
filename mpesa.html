@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M-Pesa: Business Model — Priyadarshi Dutta</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:   #0D1B2A;
+    --teal:   #1B7F79;
+    --gold:   #C9A84C;
+    --mpesa:  #C06B30;
+    --brown:  #8B4A10;
+    --white:  #FFFFFF;
+    --mid:    #4A6274;
+    --light:  #D6E4E0;
+    --bg:     #F7F5F0;
+    --text:   #1a2a35;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Source Sans 3', sans-serif; background: var(--bg); color: var(--text); font-size: 17px; line-height: 1.75; }
+
+  /* PROGRESS */
+  #progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--mpesa), var(--gold)); width: 0%; z-index: 9999; transition: width 0.15s ease; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(13,27,42,0.97); backdrop-filter: blur(8px); z-index: 100; padding: 0 2rem; height: 52px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(192,107,48,0.25); }
+  nav .brand { font-family: 'Playfair Display', serif; font-size: 0.9rem; color: var(--mpesa); text-decoration: none; }
+  nav .copy { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: rgba(214,228,224,0.45); }
+
+  /* HERO */
+  .hero { background: var(--navy); min-height: 88vh; display: flex; align-items: center; position: relative; overflow: hidden; padding: 7rem 2rem 5rem; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 55% 50% at 75% 35%, rgba(192,107,48,0.13) 0%, transparent 65%), radial-gradient(ellipse 40% 55% at 20% 75%, rgba(27,127,121,0.07) 0%, transparent 60%); }
+  .hgrid { position: absolute; inset: 0; opacity: 0.03; background-image: linear-gradient(var(--mpesa) 1px, transparent 1px), linear-gradient(90deg, var(--mpesa) 1px, transparent 1px); background-size: 52px 52px; }
+  .hero-inner { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; width: 100%; }
+  .htag { display: inline-block; background: rgba(192,107,48,0.2); border: 1px solid rgba(192,107,48,0.4); color: var(--mpesa); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.25rem 0.7rem; border-radius: 2px; margin-bottom: 1.3rem; font-family: 'JetBrains Mono', monospace; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.6rem, 5.5vw, 4.4rem); font-weight: 700; color: var(--white); line-height: 1.1; margin-bottom: 1.8rem; }
+  .hero h1 em { color: var(--mpesa); font-style: italic; }
+  .hthesis { background: rgba(192,107,48,0.12); border-left: 3px solid var(--mpesa); padding: 1rem 1.3rem; border-radius: 0 4px 4px 0; max-width: 660px; margin-bottom: 1.8rem; }
+  .hthesis p { font-size: 0.97rem; color: var(--light); line-height: 1.65; margin: 0; }
+  .hcopy { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: rgba(192,107,48,0.5); letter-spacing: 0.04em; }
+  .scroll-hint { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.3rem; color: rgba(214,228,224,0.28); font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; animation: bounce 2.2s ease-in-out infinite; }
+  .scroll-hint::after { content: '↓'; font-size: 1rem; }
+  @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(7px)} }
+
+  /* MAIN */
+  main { max-width: 860px; margin: 0 auto; padding: 0 2rem 6rem; }
+
+  .sec { padding: 4.5rem 0 1rem; }
+  .stag { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.63rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.18rem 0.55rem; border-radius: 2px; color: var(--white); margin-bottom: 0.65rem; }
+  .sec h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.45rem, 3vw, 2rem); font-weight: 700; color: var(--navy); line-height: 1.25; margin-bottom: 0.35rem; }
+  .period { font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; color: var(--mid); letter-spacing: 0.05em; margin-bottom: 1.7rem; }
+
+  .prose p { margin-bottom: 1.1rem; color: #2a3d4a; font-weight: 300; }
+  .prose p:last-child { margin-bottom: 0; }
+  .prose strong { font-weight: 600; color: var(--navy); }
+
+  /* CALLOUTS */
+  .callout { border-radius: 4px; padding: 1.2rem 1.4rem; margin: 1.7rem 0; }
+  .callout.dark { background: var(--navy); border-left: 4px solid var(--mpesa); }
+  .callout.dark .cl { font-family: 'JetBrains Mono', monospace; font-size: 0.61rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mpesa); margin-bottom: 0.5rem; }
+  .callout.dark p { color: var(--light); font-weight: 300; margin-bottom: 0.7rem; }
+  .callout.dark p:last-child { margin-bottom: 0; }
+
+  .callout.warm { background: rgba(192,107,48,0.07); border-left: 4px solid var(--mpesa); }
+  .callout.warm .cl { font-family: 'JetBrains Mono', monospace; font-size: 0.61rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mpesa); margin-bottom: 0.5rem; }
+  .callout.warm p { color: var(--text); font-weight: 300; margin-bottom: 0.7rem; }
+  .callout.warm p:last-child { margin-bottom: 0; }
+  .callout.warm .fq { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.02rem; color: var(--navy); font-weight: 700; border-top: 1px solid rgba(192,107,48,0.28); padding-top: 0.7rem; margin-top: 0.7rem; margin-bottom: 0; }
+
+  /* SHIFT */
+  .shiftbox { border-radius: 4px; padding: 1.05rem 1.35rem; margin: 1.7rem 0; display: flex; gap: 0.9rem; align-items: flex-start; }
+  .shiftbox .sl { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.52); white-space: nowrap; padding-top: 0.2rem; min-width: 70px; }
+  .shiftbox p { color: var(--white); font-size: 0.92rem; margin: 0; line-height: 1.6; }
+
+  /* PERSONS */
+  .persons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.8rem 0; }
+  .person-card { background: var(--white); border-radius: 4px; overflow: hidden; box-shadow: 0 2px 10px rgba(13,27,42,0.07); }
+  .person-card .ph { padding: 0.7rem 1rem; display: flex; align-items: center; gap: 0.6rem; }
+  .person-card .avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 700; color: var(--white); font-family: 'Playfair Display', serif; flex-shrink: 0; }
+  .person-card .pname { font-weight: 600; font-size: 0.92rem; color: var(--white); }
+  .person-card .prole { font-size: 0.75rem; color: rgba(255,255,255,0.7); }
+  .person-card .pb { padding: 0.85rem 1rem; font-size: 0.85rem; color: var(--mid); line-height: 1.6; font-weight: 300; }
+
+  /* TRANSACTION FLOW */
+  .flow { margin: 1.8rem 0; }
+  .flow-step { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 0.85rem; }
+  .flow-step .fnum { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; color: var(--white); flex-shrink: 0; margin-top: 0.15rem; }
+  .flow-step .fcontent { background: var(--white); border-radius: 4px; padding: 0.75rem 1rem; flex: 1; box-shadow: 0 2px 8px rgba(13,27,42,0.06); }
+  .flow-step .fcontent .fhead { font-weight: 600; font-size: 0.93rem; color: var(--navy); margin-bottom: 0.2rem; }
+  .flow-step .fcontent .fbody { font-size: 0.85rem; color: var(--mid); font-weight: 300; line-height: 1.6; }
+  .flow-arrow { text-align: center; color: var(--mpesa); font-size: 1.2rem; margin: 0.1rem 0 0.1rem 48px; opacity: 0.5; }
+
+  /* REVENUE CARDS */
+  .rev-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin: 1.8rem 0; }
+  .rev-card { background: var(--white); border-radius: 4px; overflow: hidden; box-shadow: 0 2px 10px rgba(13,27,42,0.07); transition: transform 0.2s, box-shadow 0.2s; }
+  .rev-card:hover { transform: translateY(-2px); box-shadow: 0 5px 18px rgba(13,27,42,0.1); }
+  .rev-card .rh { padding: 0.9rem 1rem 0.7rem; }
+  .rev-card .ricon { font-size: 1.4rem; margin-bottom: 0.3rem; }
+  .rev-card .rtitle { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--white); }
+  .rev-card .rb { padding: 0 1rem 1rem; }
+  .rev-card .rmech { font-weight: 600; font-size: 0.82rem; color: var(--navy); margin-bottom: 0.5rem; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.03em; }
+  .rev-card .rdesc { font-size: 0.85rem; color: var(--mid); line-height: 1.6; font-weight: 300; }
+  .rev-card .rexample { margin-top: 0.7rem; padding-top: 0.7rem; border-top: 1px solid rgba(13,27,42,0.06); font-size: 0.82rem; font-style: italic; color: var(--mid); }
+
+  /* SUMMARY */
+  .summary-box { background: var(--navy); border-radius: 4px; padding: 2rem 1.8rem; text-align: center; margin: 2.5rem 0 1rem; position: relative; overflow: hidden; }
+  .summary-box::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 70% at 50% 50%, rgba(192,107,48,0.1) 0%, transparent 70%); }
+  .summary-box h3 { font-family: 'Playfair Display', serif; font-size: clamp(1rem, 2vw, 1.35rem); color: var(--white); font-style: italic; line-height: 1.45; position: relative; z-index: 1; }
+  .summary-box h3 em { color: var(--mpesa); font-style: normal; }
+
+  .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(13,27,42,0.1), transparent); margin: 2.5rem 0; }
+
+  footer { background: var(--navy); color: rgba(214,228,224,0.5); text-align: center; padding: 1.6rem 2rem; font-size: 0.73rem; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; }
+  footer p + p { margin-top: 0.28rem; opacity: 0.6; }
+
+  .fi { opacity: 0; transform: translateY(16px); transition: opacity 0.55s ease, transform 0.55s ease; }
+  .fi.vis { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 580px) {
+    nav .copy { display: none; }
+    .persons { grid-template-columns: 1fr; }
+    .rev-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<nav>
+  <a class="brand" href="#">M-Pesa · Business Model</a>
+  <span class="copy">© 2026 Priyadarshi Dutta</span>
+</nav>
+
+<section class="hero">
+  <div class="hgrid"></div>
+  <div class="hero-inner">
+    <div class="htag">Session 2 · Case Study · Fintech Course</div>
+    <h1>M-Pesa:<br><em>The Business</em> Model</h1>
+    <div class="hthesis">
+      <p>A detailed walkthrough of how M-Pesa works, how it makes money, and why its model became a template for Fintech platforms worldwide. To be read alongside Session 2 classroom materials.</p>
+    </div>
+    <p class="hcopy">© 2026 Priyadarshi Dutta &nbsp;·&nbsp; All rights reserved &nbsp;·&nbsp; Not for reproduction without permission</p>
+  </div>
+  <div class="scroll-hint">scroll</div>
+</section>
+
+<main>
+
+  <!-- ORIGIN -->
+  <section class="sec fi" id="origin">
+    <div class="stag" style="background:var(--mpesa);">The Origin</div>
+    <h2>Not a Bank. Not a Startup. A Mobile Network That Noticed Something.</h2>
+    <p class="period">Kenya · 2007</p>
+  </section>
+
+  <div class="prose fi">
+    <p>M-Pesa was launched in Kenya in 2007 by Safaricom, the country's dominant mobile network operator. It did not begin as a financial product. It began as an observation.</p>
+    <p>Safaricom noticed that its customers were already transferring mobile airtime credit to each other informally. <strong>Airtime was being used as a commodity</strong> — it had a known, stable value, everyone with a phone could receive it, and it could be sold to a neighbour for cash. That cash could then be used to buy food, pay rent, or send home to family.</p>
+  </div>
+
+  <div class="callout dark fi">
+    <div class="cl">A Real Example</div>
+    <p>Person A in Nairobi buys 500 shillings of airtime credit and transfers it to Person B — her mother in a village 300km away. B cannot use airtime for food. So B sells that airtime to a neighbour at a small discount — perhaps 450 shillings worth of cash. B then uses that cash to buy food.</p>
+    <p>It worked. But it had leakage — B lost 50 shillings in the discount. And B had to find a willing buyer first. It was a workaround born out of necessity, not design.</p>
+  </div>
+
+  <div class="prose fi">
+    <p>Safaricom asked a simple question: <strong>what if we formalised this?</strong> Same phone. Same network. Same trust people already had in Safaricom. But instead of routing money through an airtime workaround, let people send money directly — instantly, in full, with no discount and no search for a buyer.</p>
+    <p>That was M-Pesa. And it worked not because it introduced people to a new institution — but because it delivered a financial service through a channel they already used and already trusted.</p>
+  </div>
+
+  <div class="shiftbox fi" style="background: var(--mpesa);">
+    <span class="sl">Key Insight</span>
+    <p>M-Pesa did not ask people to become banking customers. It asked them to use their mobile phone — which they already did — to solve a problem they already had.</p>
+  </div>
+
+  <div class="divider fi"></div>
+
+  <!-- THREE PERSONS -->
+  <section class="sec fi" id="persons">
+    <div class="stag" style="background:var(--navy);">The People</div>
+    <h2>Meet A, B and C</h2>
+    <p class="period">Three people. One transaction. The whole model.</p>
+  </section>
+
+  <div class="prose fi">
+    <p>To understand how M-Pesa works and how it makes money, follow one transaction through three people.</p>
+  </div>
+
+  <div class="persons fi">
+    <div class="person-card">
+      <div class="ph" style="background:var(--mpesa);">
+        <div class="avatar" style="background:rgba(255,255,255,0.2);">A</div>
+        <div>
+          <div class="pname">Person A</div>
+          <div class="prole">Sender · Lives in Nairobi</div>
+        </div>
+      </div>
+      <div class="pb">Works as a domestic worker in Nairobi. Earns a weekly wage. Wants to send 500 shillings to her mother in a rural village. Has a Safaricom mobile phone. No bank account.</div>
+    </div>
+    <div class="person-card">
+      <div class="ph" style="background:var(--brown);">
+        <div class="avatar" style="background:rgba(255,255,255,0.2);">B</div>
+        <div>
+          <div class="pname">Person B</div>
+          <div class="prole">Receiver · Lives in a village 300km away</div>
+        </div>
+      </div>
+      <div class="pb">A's mother. Lives in a rural village. Has a basic mobile phone on the Safaricom network. No bank account. No way to receive money electronically — until M-Pesa.</div>
+    </div>
+    <div class="person-card">
+      <div class="ph" style="background:var(--teal);">
+        <div class="avatar" style="background:rgba(255,255,255,0.2);">C</div>
+        <div>
+          <div class="pname">Person C</div>
+          <div class="prole">M-Pesa Agent · Local shopkeeper</div>
+        </div>
+      </div>
+      <div class="pb">Runs a small shop in B's village. Registered as an M-Pesa agent. Keeps a float of cash and M-Pesa credit. Earns a small commission on every transaction he processes.</div>
+    </div>
+  </div>
+
+  <div class="divider fi"></div>
+
+  <!-- TRANSACTION -->
+  <section class="sec fi" id="transaction">
+    <div class="stag" style="background:var(--teal);">How It Works</div>
+    <h2>Following One Transaction</h2>
+    <p class="period">A sends 500 shillings to B</p>
+  </section>
+
+  <div class="prose fi">
+    <p>Here is exactly what happens when A wants to send B 500 shillings.</p>
+  </div>
+
+  <div class="flow fi">
+    <div class="flow-step">
+      <div class="fnum" style="background:var(--mpesa);">1</div>
+      <div class="fcontent">
+        <div class="fhead">A deposits cash with a local M-Pesa agent near her workplace</div>
+        <div class="fbody">A hands over 500 shillings cash. The agent loads 500 shillings of M-Pesa credit onto A's SIM card. A now has a digital balance of 500 shillings on her phone. M-Pesa charges A a small transaction fee — say 10 shillings — at this point or when she sends.</div>
+      </div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">
+      <div class="fnum" style="background:var(--brown);">2</div>
+      <div class="fcontent">
+        <div class="fhead">A sends 500 shillings to B's phone number via SMS</div>
+        <div class="fbody">A types B's phone number and the amount into the M-Pesa menu on her phone and confirms. Within seconds, B receives an SMS confirming she has received 500 shillings of M-Pesa credit. The transaction takes under a minute.</div>
+      </div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-step">
+      <div class="fnum" style="background:var(--teal);">3</div>
+      <div class="fcontent">
+        <div class="fhead">B walks to C's shop and withdraws 500 shillings cash</div>
+        <div class="fbody">B shows C the SMS confirmation. C checks the M-Pesa system, hands B 500 shillings cash from his till, and B's M-Pesa balance goes to zero. C's M-Pesa digital balance goes up by 500 shillings — which he can use to replenish his agent float.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout warm fi">
+    <div class="cl">What Just Happened</div>
+    <p>Money moved from Nairobi to a rural village in under a minute. No bank. No branch. No account required. No discount. B received the full 500 shillings. The only cost was the small transaction fee paid by A.</p>
+    <p class="fq">The same journey that once required an informal airtime workaround — with leakage and uncertainty — now takes 60 seconds and costs a fraction of the alternatives.</p>
+  </div>
+
+  <div class="divider fi"></div>
+
+  <!-- BUSINESS MODEL -->
+  <section class="sec fi" id="model">
+    <div class="stag" style="background:var(--mpesa);">The Business Model</div>
+    <h2>How M-Pesa Makes Money</h2>
+    <p class="period">Three revenue streams · One elegant cost structure</p>
+  </section>
+
+  <div class="prose fi">
+    <p>M-Pesa has three sources of revenue. Each is simple individually. Together they create a business that is highly profitable, capital-light, and extremely difficult to replicate.</p>
+  </div>
+
+  <div class="rev-grid fi">
+
+    <div class="rev-card">
+      <div class="rh" style="background:var(--mpesa);">
+        <div class="ricon">🛣</div>
+        <div class="rtitle">Transaction Fee</div>
+      </div>
+      <div class="rb">
+        <div class="rmech">The Toll Road Model</div>
+        <div class="rdesc">Every transfer, withdrawal, bill payment, or airtime purchase on M-Pesa attracts a small fee. The fee is tiered — larger transactions pay a slightly higher fee — but always modest in absolute terms. On a 500 shilling transfer, the fee might be 10 shillings (2%).</div>
+        <div class="rexample">10 shillings per transaction × 10 million daily transactions = 100 million shillings per day in fees alone. The road is free to build once. After that, every user pays to drive on it.</div>
+      </div>
+    </div>
+
+    <div class="rev-card">
+      <div class="rh" style="background:var(--brown);">
+        <div class="ricon">💰</div>
+        <div class="rtitle">The Float</div>
+      </div>
+      <div class="rb">
+        <div class="rmech">Earning on Other People's Money</div>
+        <div class="rdesc">When A deposits 500 shillings with the agent, that physical cash flows into a central pooled bank account held by Safaricom. It sits there until B withdraws it at C's shop. At any given moment, millions of people have balances on their phones they have not yet withdrawn. In aggregate this pool is enormous.</div>
+        <div class="rexample">Imagine 50 billion shillings sitting in Safaricom's trust account on any given day. At 5% annual interest, that earns 2.5 billion shillings per year — quietly, without a single additional transaction. A and B earn nothing on their balance. They never expected to — they came for the transfer service.</div>
+      </div>
+    </div>
+
+    <div class="rev-card">
+      <div class="rh" style="background:var(--teal);">
+        <div class="ricon">🏪</div>
+        <div class="rtitle">The Agent Network</div>
+      </div>
+      <div class="rb">
+        <div class="rmech">A Branch Network at Near-Zero Cost</div>
+        <div class="rdesc">This is M-Pesa's cost structure, not a revenue stream — but it is what makes the model extraordinary. Instead of building bank branches, M-Pesa recruited local shopkeepers as agents. C earns a small commission per transaction. He self-funds his own cash float. He is motivated to join because it brings customers into his shop.</div>
+        <div class="rexample">M-Pesa's result: a national network of cash deposit and withdrawal points, built at almost no fixed capital cost. The cost is entirely variable — M-Pesa only pays when a transaction happens. Traditional banks spend billions building branch networks. M-Pesa outsourced that entirely to entrepreneurs already embedded in their communities.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="divider fi"></div>
+
+  <!-- WHY IT SPREAD -->
+  <section class="sec fi" id="lesson">
+    <div class="stag" style="background:var(--navy);">The Lesson</div>
+    <h2>Why This Model Became a Template</h2>
+    <p class="period">From Kenya to the World</p>
+  </section>
+
+  <div class="prose fi">
+    <p>M-Pesa proved three things that every subsequent Fintech platform has borrowed, consciously or not.</p>
+    <p><strong>Start with one high-frequency, painful, simple problem.</strong> Not a full product suite. Not a vision for the future of finance. One thing: A needs to send B 500 shillings. Solve that completely. Build trust. Then expand.</p>
+    <p><strong>Use infrastructure people already trust.</strong> M-Pesa did not ask Kenyans to download an app, open a bank account, or trust a new institution. It used the mobile phone — already in everyone's pocket — and Safaricom's existing network relationship. The product arrived through a channel that required no new leap of faith.</p>
+    <p><strong>Once the platform exists, layer products on top.</strong> After establishing trust through simple money transfer, M-Pesa expanded into savings (M-Shwari), overdrafts (Fuliza), and merchant payments. Each new product cost almost nothing to distribute because millions of people were already on the platform. The hard work — building the agent network, earning trust, acquiring users — had already been done.</p>
+  </div>
+
+  <div class="callout dark fi">
+    <div class="cl">The Numbers</div>
+    <p>Within three years of launch, M-Pesa had more customers than Kenya's entire formal banking system combined. By some estimates, transactions equivalent to 40–50% of Kenya's GDP flow through M-Pesa annually. No single private financial platform in a developed market comes close to that level of economic penetration relative to the size of the economy.</p>
+  </div>
+
+  <div class="summary-box fi">
+    <h3>M-Pesa built a <em>toll road for money</em> between people who had never had one. It charged a small fee on every journey, earned quietly on the money sitting between journeys, and used local shopkeepers as its branch network — all without owning a single bank.</h3>
+  </div>
+
+  <p class="fi" style="font-size:0.76rem; color:var(--mid); font-family:'JetBrains Mono',monospace; letter-spacing:0.03em; margin-top:1.5rem; padding-bottom:3rem;">
+    © 2026 Priyadarshi Dutta. All rights reserved. Prepared for academic use in the Fintech Course. Not for reproduction or distribution without permission.
+  </p>
+
+</main>
+
+<footer>
+  <p>Priyadarshi Dutta &nbsp;·&nbsp; Fintech Course &nbsp;·&nbsp; Session 2: M-Pesa Business Model</p>
+  <p>© 2026 · All rights reserved · Not for reproduction without permission</p>
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const d = document.documentElement;
+    const pct = (d.scrollTop / (d.scrollHeight - d.clientHeight)) * 100;
+    document.getElementById('progress-bar').style.width = Math.min(pct,100) + '%';
+  });
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); } });
+  }, { threshold: 0.07, rootMargin: '0px 0px -25px 0px' });
+  document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
