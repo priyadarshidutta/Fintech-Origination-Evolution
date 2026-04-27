@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fintech: Origins &amp; Evolution — Priyadarshi Dutta</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:    #0D1B2A;
+    --teal:    #1B7F79;
+    --gold:    #C9A84C;
+    --white:   #FFFFFF;
+    --mid:     #4A6274;
+    --light:   #D6E4E0;
+    --r1:      #1B7F79;
+    --r2:      #2A6496;
+    --r3:      #7B5EA7;
+    --r4:      #C06B30;
+    --text:    #1a2a35;
+    --bg:      #F7F5F0;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Source Sans 3', sans-serif; background: var(--bg); color: var(--text); font-size: 17px; line-height: 1.75; }
+
+  #progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--teal), var(--gold)); width: 0%; z-index: 9999; transition: width 0.15s ease; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(13,27,42,0.97); backdrop-filter: blur(8px); z-index: 100; padding: 0 2rem; height: 52px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(201,168,76,0.2); }
+  nav .brand { font-family: 'Playfair Display', serif; font-size: 0.9rem; color: var(--gold); text-decoration: none; }
+  nav .copy { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: rgba(214,228,224,0.45); }
+
+  .hero { background: var(--navy); min-height: 90vh; display: flex; align-items: center; position: relative; overflow: hidden; padding: 7rem 2rem 5rem; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 80% 30%, rgba(27,127,121,0.11) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 20% 80%, rgba(201,168,76,0.06) 0%, transparent 60%); }
+  .hgrid { position: absolute; inset: 0; opacity: 0.035; background-image: linear-gradient(var(--teal) 1px, transparent 1px), linear-gradient(90deg, var(--teal) 1px, transparent 1px); background-size: 48px 48px; }
+  .hero-inner { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; width: 100%; }
+  .htag { display: inline-block; background: rgba(27,127,121,0.2); border: 1px solid rgba(27,127,121,0.4); color: var(--teal); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.25rem 0.7rem; border-radius: 2px; margin-bottom: 1.3rem; font-family: 'JetBrains Mono', monospace; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 6vw, 4.8rem); font-weight: 700; color: var(--white); line-height: 1.1; margin-bottom: 1.8rem; }
+  .hero h1 em { color: var(--gold); font-style: italic; }
+  .hthesis { background: rgba(27,127,121,0.13); border-left: 3px solid var(--teal); padding: 1rem 1.3rem; border-radius: 0 4px 4px 0; max-width: 660px; margin-bottom: 1.8rem; }
+  .hthesis p { font-size: 0.97rem; color: var(--light); line-height: 1.65; margin: 0; }
+  .hcopy { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: rgba(201,168,76,0.5); letter-spacing: 0.04em; }
+  .scroll-hint { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.3rem; color: rgba(214,228,224,0.28); font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; animation: bounce 2.2s ease-in-out infinite; }
+  .scroll-hint::after { content: '↓'; font-size: 1rem; }
+  @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(7px); } }
+
+  /* HOOK */
+  .hook { max-width: 860px; margin: 0 auto; padding: 5rem 2rem 3rem; }
+  .stag { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.63rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.18rem 0.55rem; border-radius: 2px; color: var(--white); margin-bottom: 0.65rem; }
+  .hook h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.45rem, 3vw, 2rem); font-weight: 700; color: var(--navy); line-height: 1.25; margin-bottom: 0.35rem; }
+  .period { font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; color: var(--mid); letter-spacing: 0.05em; margin-bottom: 1.7rem; }
+
+  .prose p { margin-bottom: 1.1rem; color: #2a3d4a; font-weight: 300; }
+  .prose p:last-child { margin-bottom: 0; }
+
+  .callout { border-radius: 4px; padding: 1.2rem 1.4rem; margin: 1.7rem 0; }
+  .callout.world { background: var(--navy); border-left: 4px solid var(--teal); }
+  .callout.world .cl { font-family: 'JetBrains Mono', monospace; font-size: 0.61rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); margin-bottom: 0.5rem; }
+  .callout.world p { color: var(--light); font-weight: 300; margin-bottom: 0.7rem; }
+  .callout.world p:last-child { margin-bottom: 0; }
+  .callout.friction { border-left: 4px solid var(--gold); background: rgba(201,168,76,0.06); }
+  .callout.friction .cl { font-family: 'JetBrains Mono', monospace; font-size: 0.61rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+  .callout.friction p { color: var(--text); font-weight: 300; margin-bottom: 0.7rem; }
+  .callout.friction p:last-child { margin-bottom: 0; }
+  .callout.friction .fq { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.02rem; color: var(--navy); font-weight: 700; border-top: 1px solid rgba(201,168,76,0.28); padding-top: 0.7rem; margin-top: 0.7rem; margin-bottom: 0; }
+
+  .shiftbox { border-radius: 4px; padding: 1.05rem 1.35rem; margin: 1.7rem 0; display: flex; gap: 0.9rem; align-items: flex-start; }
+  .shiftbox .sl { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.52); white-space: nowrap; padding-top: 0.2rem; min-width: 70px; }
+  .shiftbox p { color: var(--white); font-size: 0.92rem; margin: 0; line-height: 1.6; }
+
+  .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(13,27,42,0.1), transparent); margin: 2.5rem 0; }
+
+  /* TABS */
+  .tabs-wrap { max-width: 860px; margin: 0 auto; padding: 0 2rem 5rem; }
+  .tabs-intro { text-align: center; padding: 2rem 0 2.2rem; }
+  .tabs-intro h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.35rem, 2.5vw, 1.85rem); color: var(--navy); font-weight: 700; margin-bottom: 0.45rem; }
+  .tabs-intro p { font-size: 0.88rem; color: var(--mid); font-weight: 300; font-style: italic; }
+
+  .tab-bar { display: flex; border-radius: 4px 4px 0 0; overflow: hidden; border: 1px solid rgba(13,27,42,0.1); border-bottom: none; }
+  .tab-btn { flex: 1; padding: 0.8rem 0.4rem; border: none; cursor: pointer; font-family: 'Source Sans 3', sans-serif; font-size: 0.78rem; font-weight: 600; background: rgba(13,27,42,0.04); color: var(--mid); border-right: 1px solid rgba(13,27,42,0.08); transition: background 0.2s, color 0.2s; text-align: center; line-height: 1.3; }
+  .tab-btn:last-child { border-right: none; }
+  .tab-btn .tnum { display: block; font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; line-height: 1; margin-bottom: 0.12rem; }
+  .tab-btn .tlbl { display: block; font-size: 0.7rem; letter-spacing: 0.02em; }
+  .tab-btn:hover { background: rgba(13,27,42,0.08); color: var(--navy); }
+  .tab-btn.active { color: var(--white); }
+  .tab-btn[data-tab="r1"].active { background: var(--r1); }
+  .tab-btn[data-tab="r2"].active { background: var(--r2); }
+  .tab-btn[data-tab="r3"].active { background: var(--r3); }
+  .tab-btn[data-tab="r4"].active { background: var(--r4); }
+
+  .tab-panels { border: 1px solid rgba(13,27,42,0.1); border-radius: 0 0 4px 4px; background: var(--white); box-shadow: 0 4px 20px rgba(13,27,42,0.06); }
+  .tab-panel { display: none; padding: 2rem 2rem 2.5rem; }
+  .tab-panel.active { display: block; }
+
+  .rband { display: flex; align-items: center; gap: 1rem; padding: 1.2rem 1.5rem; border-radius: 4px; margin-bottom: 1.7rem; position: relative; overflow: hidden; }
+  .rband::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.12); pointer-events: none; }
+  .rnum { font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 700; color: rgba(255,255,255,0.2); line-height: 1; position: relative; z-index: 1; min-width: 48px; }
+  .rinfo { position: relative; z-index: 1; flex: 1; }
+  .rtitle { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; color: var(--white); margin-bottom: 0.1rem; }
+  .rq { font-size: 0.83rem; color: rgba(255,255,255,0.7); font-style: italic; }
+  .rperiod { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: rgba(255,255,255,0.45); letter-spacing: 0.06em; white-space: nowrap; position: relative; z-index: 1; }
+
+  /* timeline */
+  .tl { position: relative; padding-left: 1.7rem; margin: 1.6rem 0; }
+  .tl::before { content: ''; position: absolute; left: 5px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(to bottom, var(--teal), rgba(27,127,121,0.08)); }
+  .tl-item { position: relative; margin-bottom: 1.5rem; }
+  .tl-item::before { content: ''; position: absolute; left: -1.48rem; top: 7px; width: 9px; height: 9px; border-radius: 50%; background: var(--teal); border: 2px solid var(--white); }
+  .ty { font-family: 'JetBrains Mono', monospace; font-size: 0.71rem; font-weight: 600; color: var(--teal); letter-spacing: 0.05em; margin-bottom: 0.16rem; }
+  .te { font-weight: 600; color: var(--navy); margin-bottom: 0.22rem; font-size: 0.93rem; }
+  .td { font-size: 0.85rem; color: var(--mid); line-height: 1.6; font-weight: 300; }
+
+  /* invention cards */
+  .igrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.9rem; margin: 1.6rem 0; }
+  .icard { background: var(--bg); border-radius: 4px; overflow: hidden; border: 1px solid rgba(13,27,42,0.07); transition: transform 0.2s, box-shadow 0.2s; }
+  .icard:hover { transform: translateY(-2px); box-shadow: 0 5px 18px rgba(13,27,42,0.1); }
+  .iy { padding: 0.55rem 0.9rem; font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--white); }
+  .ib { padding: 0.85rem 0.9rem; }
+  .it { font-weight: 600; font-size: 0.9rem; color: var(--navy); margin-bottom: 0.3rem; }
+  .ix { font-size: 0.83rem; color: var(--mid); line-height: 1.6; font-weight: 300; }
+
+  /* pattern */
+  .pattern-wrap { max-width: 860px; margin: 0 auto; padding: 0 2rem 1rem; }
+  .pattern-wrap h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.4rem, 2.5vw, 1.85rem); color: var(--navy); font-weight: 700; margin-bottom: 0.35rem; }
+
+  .ptbl { width: 100%; border-collapse: collapse; margin: 1.6rem 0; border-radius: 4px; overflow: hidden; box-shadow: 0 2px 10px rgba(13,27,42,0.07); }
+  .ptbl th { background: var(--navy); color: var(--light); font-size: 0.66rem; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.6rem 0.85rem; text-align: left; }
+  .ptbl td { padding: 0.75rem 0.85rem; font-size: 0.87rem; border-bottom: 1px solid rgba(13,27,42,0.06); background: var(--white); vertical-align: top; }
+  .ptbl tr:last-child td { border-bottom: none; }
+  .ptbl td:first-child { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.2rem; }
+  .ptbl td:nth-child(2) { font-weight: 600; color: var(--navy); }
+  .ptbl td:nth-child(3) { color: var(--mid); font-weight: 300; }
+  .ptbl td:last-child { font-style: italic; color: var(--mid); font-size: 0.8rem; }
+
+  .closingq { background: var(--navy); border-radius: 4px; padding: 2.3rem 1.8rem; text-align: center; margin: 2.5rem 0 1.2rem; position: relative; overflow: hidden; }
+  .closingq::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(27,127,121,0.09) 0%, transparent 70%); }
+  .closingq h3 { font-family: 'Playfair Display', serif; font-size: clamp(1.05rem, 2vw, 1.42rem); color: var(--white); font-style: italic; line-height: 1.45; margin-bottom: 0.75rem; position: relative; z-index: 1; }
+  .closingq p { font-size: 0.78rem; color: rgba(214,228,224,0.45); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; position: relative; z-index: 1; }
+
+  footer { background: var(--navy); color: rgba(214,228,224,0.5); text-align: center; padding: 1.6rem 2rem; font-size: 0.73rem; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; }
+  footer p + p { margin-top: 0.28rem; opacity: 0.6; }
+
+  .fi { opacity: 0; transform: translateY(16px); transition: opacity 0.55s ease, transform 0.55s ease; }
+  .fi.vis { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 580px) {
+    nav .copy { display: none; }
+    .tab-btn .tlbl { display: none; }
+    .tab-panel { padding: 1.3rem 1.1rem 2rem; }
+    .igrid { grid-template-columns: 1fr; }
+    .rperiod { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<nav>
+  <a class="brand" href="#">Fintech · Origins &amp; Evolution</a>
+  <span class="copy">© 2026 Priyadarshi Dutta</span>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hgrid"></div>
+  <div class="hero-inner">
+    <div class="htag">Session 1 · Fintech Course</div>
+    <h1>Fintech:<br><em>Origins</em> &amp; Evolution</h1>
+    <div class="hthesis">
+      <p>This section provides an overview of the origination and evolution of Fintech. It is to be read alongside classroom materials and the accompanying session slides.</p>
+    </div>
+    <p class="hcopy">© 2026 Priyadarshi Dutta &nbsp;·&nbsp; All rights reserved &nbsp;·&nbsp; Not for reproduction without permission</p>
+  </div>
+  <div class="scroll-hint">scroll</div>
+</section>
+
+<!-- HOOK -->
+<section class="hook">
+
+  <div class="fi">
+    <div class="stag" style="background:var(--gold);color:var(--navy);">The Hook</div>
+    <h2>What Was the Most Important Financial Innovation in History?</h2>
+    <p class="period">Medieval Italy · 12th Century</p>
+  </div>
+
+  <div class="prose fi">
+    <p>A compelling answer — and one that is often overlooked — is the <strong>bill of exchange</strong>, developed by merchants in medieval Italy around the 12th century. Understanding why it matters is the key to understanding everything that follows.</p>
+  </div>
+
+  <div class="callout world fi">
+    <div class="cl">The World Then</div>
+    <p>It is the height of the Mediterranean trading era. Merchants from Venice, Genoa, and Florence are conducting commerce across vast distances — north to the cloth markets of Bruges and Antwerp, east to the spice routes of the Levant. Goods move by ship and mule. The world is, for its time, remarkably connected.</p>
+    <p>But money is physical. It is gold and silver coin. And gold is heavy, conspicuous, and dangerous to carry across Europe. A merchant travelling from Venice to Bruges with enough gold to settle a major transaction is an obvious target.</p>
+  </div>
+
+  <div class="callout friction fi">
+    <div class="cl">The Friction</div>
+    <p>Commerce over long distances depends on the ability to transfer value reliably. But the only way to move value is to physically carry it. The further the trade route, the greater the danger and cost. Commerce is constrained not by lack of opportunity, but by the physical challenges of moving money across distance.</p>
+    <p class="fq">"What if trust could travel faster than gold?"</p>
+  </div>
+
+  <div class="prose fi">
+    <p>The bill of exchange was the answer. A merchant in Venice who needed to pay a supplier in Bruges would deposit gold with a trusted banker in Venice, who would write a document — a bill — instructing his counterpart banker in Bruges to release an equivalent sum. The gold never moved. Only the paper did.</p>
+    <p>This is a conceptual leap of considerable significance. It is among the first times in history that the <em>representation</em> of value was separated from the <em>physical substance</em> of value. Money became an abstraction backed by trust rather than by metal in hand.</p>
+  </div>
+
+  <div class="shiftbox fi" style="background:var(--teal);">
+    <span class="sl">Core Insight</span>
+    <p>Fintech is, in many important cases, about removing friction from moving, storing, or trusting money. Every rupture moment in this story is in some way a variation of the same idea that a Florentine banker worked out in the 1100s. The technology changes. The underlying problem often stays the same.</p>
+  </div>
+
+  <div class="divider fi"></div>
+</section>
+
+<!-- TABBED RUPTURES -->
+<div class="tabs-wrap">
+
+  <div class="tabs-intro fi">
+    <h2>Four Times the World Changed — and Finance Had to Catch Up</h2>
+    <p>Each rupture moment: a friction point, an invention, a shift in what finance is for and who it serves.</p>
+  </div>
+
+  <div class="tab-bar" role="tablist">
+    <button class="tab-btn active" data-tab="r1" role="tab" aria-selected="true">
+      <span class="tnum">1</span><span class="tlbl">Distance</span>
+    </button>
+    <button class="tab-btn" data-tab="r2" role="tab" aria-selected="false">
+      <span class="tnum">2</span><span class="tlbl">Scale</span>
+    </button>
+    <button class="tab-btn" data-tab="r3" role="tab" aria-selected="false">
+      <span class="tnum">3</span><span class="tlbl">Trust</span>
+    </button>
+    <button class="tab-btn" data-tab="r4" role="tab" aria-selected="false">
+      <span class="tnum">4</span><span class="tlbl">Access</span>
+    </button>
+  </div>
+
+  <div class="tab-panels">
+
+    <!-- R1 -->
+    <div class="tab-panel active" id="panel-r1">
+      <div class="rband" style="background:var(--r1);">
+        <div class="rnum">1</div>
+        <div class="rinfo">
+          <div class="rtitle">The Distance Problem</div>
+          <div class="rq">"How do you move money faster than a horse?"</div>
+        </div>
+        <div class="rperiod">1860s – 1920s</div>
+      </div>
+
+      <div class="callout world">
+        <div class="cl">The World</div>
+        <p>It is the mid-19th century and the world is connecting at scale. Railways are crossing continents. Steamships are shrinking oceans. Cotton from India is being sold in Manchester. Coffee from Brazil is being traded in Amsterdam. Global commerce has arrived.</p>
+        <p>But it has a fundamental problem. Money is still physical — gold, silver, and paper notes that someone must carry. A merchant in New York who needs to pay a supplier in London must either ship gold across the Atlantic — a six-week voyage with real risks and insurance costs — or arrange a letter of credit that might take nearly as long to verify. Trade is growing faster than the infrastructure to finance it.</p>
+      </div>
+
+      <div class="callout friction">
+        <div class="cl">The Friction</div>
+        <p>The telegraph has existed since the 1840s and has already transformed journalism, military strategy, and railway scheduling. But its application to finance lags significantly behind. The obvious question has not yet been answered:</p>
+        <p class="fq">"If a message can travel instantly across a wire — why can't money?"</p>
+      </div>
+
+      <div class="prose">
+        <p>The answer involved a conceptual shift as much as a technical one. Money itself could not travel down a wire — but the <em>authorisation to release money</em> held at the other end absolutely could. The telegraph made possible a new kind of transaction: not the physical transfer of value, but the electronic transfer of instructions.</p>
+      </div>
+
+      <div class="tl">
+        <div class="tl-item">
+          <div class="ty">1844</div>
+          <div class="te">Morse demonstrates the telegraph</div>
+          <div class="td">Instantaneous long-distance communication becomes possible. The financial implications take another two decades to be fully realised.</div>
+        </div>
+        <div class="tl-item">
+          <div class="ty">1866</div>
+          <div class="te">First permanent transatlantic telegraph cable</div>
+          <div class="td">Banks begin transmitting financial instructions across the Atlantic — not gold, but the authorisation to release gold already held at the destination. This is effectively the first electronic international money transfer.</div>
+        </div>
+        <div class="tl-item">
+          <div class="ty">1918</div>
+          <div class="te">Fedwire — the world's first electronic funds transfer system</div>
+          <div class="td">The US Federal Reserve deploys a telegraph-based system allowing member banks to transfer funds electronically. For the first time, money moves at the speed of electricity rather than the speed of transportation. A transaction that once took weeks takes hours.</div>
+        </div>
+      </div>
+
+      <div class="shiftbox" style="background:var(--r1);">
+        <span class="sl">The Shift</span>
+        <p>Money was permanently separated from the physical movement of money. This is the foundational idea that wire transfers, card payments, digital wallets, and cryptocurrency are all built upon. The question now became: how fast can the wire go?</p>
+      </div>
+    </div>
+
+    <!-- R2 -->
+    <div class="tab-panel" id="panel-r2">
+      <div class="rband" style="background:var(--r2);">
+        <div class="rnum">2</div>
+        <div class="rinfo">
+          <div class="rtitle">The Scale Problem</div>
+          <div class="rq">"How do you serve millions of customers without an army of clerks?"</div>
+        </div>
+        <div class="rperiod">1950s – 1980s</div>
+      </div>
+
+      <div class="callout world">
+        <div class="cl">The World</div>
+        <p>Post-war prosperity reshapes the world. In the United States, Western Europe, and increasingly parts of Asia, a new middle class emerges — people with regular salaries, growing savings, and aspirations that include home ownership, consumer goods, and financial security. Banks, which had historically served the wealthy and the commercial class, now face a challenge of a different order entirely: <em>mass retail finance</em>.</p>
+        <p>Suddenly there are millions of ordinary customers, each with relatively small but complex needs — current accounts, savings, mortgages, personal loans, insurance.</p>
+      </div>
+
+      <div class="callout friction">
+        <div class="cl">The Friction</div>
+        <p>Banking in 1950 is almost entirely manual. Every transaction is recorded by hand. Every loan application is assessed by a bank manager who ideally knows the applicant personally — which means access to credit is effectively rationed by personal relationship, social class, and geography.</p>
+        <p>For banks, the arithmetic is difficult. Processing millions of small transactions manually requires large numbers of clerks — expensive, slow, and error-prone. And for customers, an additional friction is emerging: to do anything with your money, you must physically visit a branch during working hours.</p>
+        <p class="fq">"The customer base multiplied. The system did not."</p>
+      </div>
+
+      <div class="prose">
+        <p>Three inventions arrived in relatively quick succession. Individually each was significant. Together they fundamentally rewired retail finance and created the system that much of the world still uses today.</p>
+      </div>
+
+      <div class="igrid">
+        <div class="icard">
+          <div class="iy" style="background:var(--r2);">1950s – 60s</div>
+          <div class="ib">
+            <div class="it">Mainframe Computers &amp; Core Banking</div>
+            <div class="ix">What once required large numbers of clerks could now be processed in automated overnight batch runs. Core banking — the recording of accounts, transactions, and balances — moved onto machines. Banks could scale without proportionally scaling their workforce.</div>
+          </div>
+        </div>
+        <div class="icard">
+          <div class="iy" style="background:var(--r2);">1950 – 1966</div>
+          <div class="ib">
+            <div class="it">The Credit Card</div>
+            <div class="ix">Diners Club (1950, New York). BankAmericard — later Visa — (1958). Barclaycard (1966, UK — the first in Europe). Spend now, settle later, with a card network managing trust and settlement. Cash began its long, slow retreat.</div>
+          </div>
+        </div>
+        <div class="icard">
+          <div class="iy" style="background:var(--r2);">1967</div>
+          <div class="ib">
+            <div class="it">The ATM</div>
+            <div class="ix">Barclays Bank, Enfield, North London, 27 June 1967. The first time a machine — not a person — mediated a financial transaction with a retail customer. The bank branch was no longer the only point of access to one's own money.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="shiftbox" style="background:var(--r2);">
+        <span class="sl">The Shift</span>
+        <p>Finance became industrialised. The relationship between a customer and their money became increasingly mediated by technology rather than people. Credit was democratised and made mass-market for the first time. The infrastructure built to serve this new consumer laid the foundations for everything digital that followed.</p>
+      </div>
+    </div>
+
+    <!-- R3 -->
+    <div class="tab-panel" id="panel-r3">
+      <div class="rband" style="background:var(--r3);">
+        <div class="rnum">3</div>
+        <div class="rinfo">
+          <div class="rtitle">The Trust Problem</div>
+          <div class="rq">"What happens when the institutions themselves become the risk?"</div>
+        </div>
+        <div class="rperiod">2008 – 2014</div>
+      </div>
+
+      <div class="callout world">
+        <div class="cl">The World</div>
+        <p>By the early 2000s the financial system looks — from the outside — like a success. Online banking has arrived. Cards are accepted everywhere. Capital flows freely across borders. Banks are profitable, growing, and, in the public imagination, the ultimate establishment institutions: solid, permanent, and trustworthy.</p>
+        <p>Then 2008 happens. It does not just cause economic damage. It causes something more corrosive and longer-lasting: the collapse of the presumption of institutional trustworthiness.</p>
+      </div>
+
+      <div class="callout friction">
+        <div class="cl">The Friction</div>
+        <p>Banks assumed to be prudent turn out to have been reckless, packaging toxic mortgage debt into instruments so complex that even those selling them did not fully understand them. Regulators assumed to be watchful turn out to have been largely inactive. Taxpayers are required to bail out institutions that subsequently pay significant executive bonuses. A generation enters the workforce into a recession caused in significant part by the very institutions they were expected to trust.</p>
+        <p class="fq">"If the trusted third parties cannot be trusted — what then?"</p>
+      </div>
+
+      <div class="prose">
+        <p>At exactly this moment of maximum institutional distrust, two things happen. In October 2008 — weeks after Lehman Brothers collapsed — a pseudonymous author named Satoshi Nakamoto publishes a paper titled <em>Bitcoin: A Peer-to-Peer Electronic Cash System</em>. Its opening sentence describes the problem it solves: the need for electronic payments to rely on a trusted third party. Bitcoin is, at its core, a philosophical response to institutional failure — a mathematically enforced alternative to institutionally promised trust.</p>
+        <p>In parallel, a generation of technologists who might once have joined established financial institutions instead begins to build against them. The smartphone has arrived. Mobile internet is spreading. And frustration with institutional failure becomes, for many, a design brief.</p>
+      </div>
+
+      <div class="igrid">
+        <div class="icard">
+          <div class="iy" style="background:var(--r3);">2009</div>
+          <div class="ib">
+            <div class="it">Square</div>
+            <div class="ix">A small card reader plugging into a smartphone. Market stalls, food trucks, small craftspeople — anyone — could now accept card payments. The ability to receive money electronically was no longer restricted to businesses large enough to afford a traditional card terminal.</div>
+          </div>
+        </div>
+        <div class="icard">
+          <div class="iy" style="background:var(--r3);">2010</div>
+          <div class="ib">
+            <div class="it">Stripe</div>
+            <div class="ix">Accepting money online previously required weeks of bank negotiations and specialist knowledge. Patrick and John Collison reduced it to a few lines of code. The friction of getting paid on the internet fell sharply and the barrier to building online businesses dropped significantly.</div>
+          </div>
+        </div>
+        <div class="icard">
+          <div class="iy" style="background:var(--r3);">2011</div>
+          <div class="ib">
+            <div class="it">Transferwise (now Wise)</div>
+            <div class="ix">Founded after calculating that banks were taking approximately 5% on international transfers — hidden within exchange rate margins. By matching customers transferring money in opposite directions, they bypassed banks entirely. Frustration at institutional extraction became a business model.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="prose">
+        <p>Regulators also began to respond. The UK's Financial Conduct Authority launched a regulatory sandbox in 2014 — a formal environment where Fintech companies could test products with real customers without requiring full regulatory approval first. This signalled that regulators were beginning to accommodate challengers rather than simply obstruct them.</p>
+      </div>
+
+      <div class="shiftbox" style="background:var(--r3);">
+        <span class="sl">The Shift</span>
+        <p>For the first time in the modern era the incumbents were genuinely on the back foot. Fintech became not just a story about banks adopting new technology, but a challenge to the role of institutions in finance itself. The question of who gets to be trusted with money was suddenly open again.</p>
+      </div>
+    </div>
+
+    <!-- R4 -->
+    <div class="tab-panel" id="panel-r4">
+      <div class="rband" style="background:var(--r4);">
+        <div class="rnum">4</div>
+        <div class="rinfo">
+          <div class="rtitle">The Access Problem</div>
+          <div class="rq">"What about the two billion people the system never reached?"</div>
+        </div>
+        <div class="rperiod">2007 – 2018</div>
+      </div>
+
+      <div class="callout world">
+        <div class="cl">The World</div>
+        <p>While Western Fintech was building challenger banks and payment apps for people who already had bank accounts, half the world's adults had no formal relationship with the financial system whatsoever. This was not a peripheral problem. It was the financial reality for people across sub-Saharan Africa, South and Southeast Asia, and Latin America — billions of people fully excluded from the formal financial system.</p>
+      </div>
+
+      <div class="callout friction">
+        <div class="cl">The Friction</div>
+        <p>Financial exclusion is not merely inconvenient — it is structurally trapping. Without a bank account, receiving a salary electronically is difficult, which limits employment options. Without a credit history, accessing a loan is extremely difficult, which constrains the businesses people can build. Without insurance, a single health crisis, flood, or crop failure can be economically devastating and very hard to recover from.</p>
+        <p>Traditional banks had a straightforward explanation: these customers were not profitable. The cost of building branches in rural areas, completing onboarding requirements, and processing small transactions substantially exceeded the revenue those customers would generate. The economics did not work. And so the formal financial system was simply not designed for them.</p>
+        <p class="fq">"The system was not broken for these people. It was never built for them."</p>
+      </div>
+
+      <div class="shiftbox" style="background:var(--r4);">
+        <span class="sl">To Be Continued</span>
+        <p>The solutions to this problem — and the story of how mobile technology, platform companies, and state-built infrastructure addressed financial exclusion across three continents — are covered in the next module, alongside the business models and regulatory environment that shaped Fintech's expansion.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PATTERN -->
+<div class="pattern-wrap">
+
+  <div class="divider fi"></div>
+
+  <div class="fi">
+    <div class="stag" style="background:var(--navy);">Synthesis</div>
+    <h2>The Pattern</h2>
+    <p class="period">What the four ruptures have in common</p>
+  </div>
+
+  <div class="prose fi">
+    <p>Step back from the individual stories and a consistent structure emerges across all four rupture moments. Each follows the same arc: a world that has changed faster than its financial infrastructure, a specific friction that results, an innovation that addresses it — and a shift that extends beyond the technology itself.</p>
+  </div>
+
+  <table class="ptbl fi">
+    <thead>
+      <tr><th>#</th><th>The Problem</th><th>The Friction</th><th>What Changed</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="color:var(--r1);">1</td>
+        <td>Distance</td>
+        <td>Money was physical — too slow for global trade</td>
+        <td>Money separated from its physical movement</td>
+      </tr>
+      <tr>
+        <td style="color:var(--r2);">2</td>
+        <td>Scale</td>
+        <td>The system could not serve millions manually</td>
+        <td>Finance industrialised; credit democratised</td>
+      </tr>
+      <tr>
+        <td style="color:var(--r3);">3</td>
+        <td>Trust</td>
+        <td>The institutions themselves became the risk</td>
+        <td>Who gets trusted with money is an open question</td>
+      </tr>
+      <tr>
+        <td style="color:var(--r4);">4</td>
+        <td>Access</td>
+        <td>Billions excluded by design, not accident</td>
+        <td>Covered in next module</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="prose fi">
+    <p>There is one observation worth noting across all four cases. In each rupture, the significant innovation did not originate from the centre of the existing financial system. It came from people who experienced the friction most directly — or who looked at it from the outside and concluded it did not have to be that way.</p>
+    <p>The transatlantic cable was not built by bankers. The ATM was not invented by a branch manager. Bitcoin was written by someone who distrusted banks entirely. M-Pesa was launched by a mobile phone company. UPI was designed by engineers at the National Payments Corporation of India, not by the country's largest banks.</p>
+    <p>Those inside a system are invested in its continuity. Those who feel its friction most acutely are often most motivated to change it.</p>
+  </div>
+
+  <div class="closingq fi">
+    <h3>"In 2007, three things happened that would transform Fintech: the iPhone launched, the financial crisis began, and M-Pesa launched in Kenya. None of them were Fintech companies. So — what actually causes Fintech to explode when it does?"</h3>
+    <p>— This question anchors the next session</p>
+  </div>
+
+  <p class="fi" style="font-size:0.76rem; color:var(--mid); font-family:'JetBrains Mono',monospace; letter-spacing:0.03em; margin-top:1.3rem; padding-bottom:3rem;">
+    © 2026 Priyadarshi Dutta. All rights reserved. Prepared for academic use in the Fintech Course. Not for reproduction or distribution without permission.
+  </p>
+
+</div>
+
+<footer>
+  <p>Priyadarshi Dutta &nbsp;·&nbsp; Fintech Course &nbsp;·&nbsp; Session 1: Origins &amp; Evolution</p>
+  <p>© 2026 · All rights reserved · Not for reproduction without permission</p>
+</footer>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const d = document.documentElement;
+    const pct = (d.scrollTop / (d.scrollHeight - d.clientHeight)) * 100;
+    document.getElementById('progress-bar').style.width = Math.min(pct,100) + '%';
+  });
+
+  // Tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const t = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected','true');
+      document.getElementById('panel-' + t).classList.add('active');
+    });
+  });
+
+  // Fade in on scroll
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); } });
+  }, { threshold: 0.07, rootMargin: '0px 0px -25px 0px' });
+  document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
